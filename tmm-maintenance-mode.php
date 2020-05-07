@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Plugin Name: Maintenance Mode by The Mighty Mo! Design Co.
  * Plugin URI: http://www.themightymo.com/
@@ -7,7 +6,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: http://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.1
+ * Version: 1.2
  */
  
 function tmm_maintenance_mode() {
@@ -18,18 +17,17 @@ function tmm_maintenance_mode() {
 add_action('get_header', 'tmm_maintenance_mode');
 
 
-function tmm_frontend_alert() {
+function tmm_admin_alert() {
   echo '<style>
     #wpadminbar {
       background:red !important;
     } 
+    #wpadminbar:after {
+	    content: "[THIS SITE IS IN DEVELOPMENT MODE - Sincerely, TMM Maintenance Mode Plugin]";
+	    font-size: 1em;
+	    font-weight: bold;
+	    color: #000;
+    }
   </style>';
 }
-add_action('admin_head', 'tmm_frontend_alert');
-
-
-function tmm_admin_alert() {
-  wp_register_style( 'tmm_admin_alert', plugins_url() . '/style.css', false, '1.0.0' );
-  wp_enqueue_style( 'tmm_admin_alert' );
-}
-add_action('admin_enqueue_scripts', 'tmm_admin_alert');    
+add_action('admin_head', 'tmm_admin_alert');
