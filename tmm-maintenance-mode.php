@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: http://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.3
+ * Version: 1.4
  */
  
 function tmm_maintenance_mode() {
