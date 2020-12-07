@@ -32,3 +32,4 @@ function tmm_admin_alert() {
   </style>';
 }
 add_action('admin_head', 'tmm_admin_alert');
+add_action('wp_head', 'tmm_admin_alert');
