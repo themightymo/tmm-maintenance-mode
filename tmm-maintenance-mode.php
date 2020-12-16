@@ -12,7 +12,7 @@
  
 function tmm_maintenance_mode() {
     if ( !current_user_can( 'edit_themes' ) || !is_user_logged_in() ) {
-        wp_die('<center><img src="https://www.themightymo.com/wp-content/uploads/2018/03/the-mighty-mo-logo-March-2018-green-200px-new.png" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
+        wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
     }
 }
 add_action('get_header', 'tmm_maintenance_mode');
