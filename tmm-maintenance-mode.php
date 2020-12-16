@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: http://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.4
+ * Version: 1.5
  */
  
 function tmm_maintenance_mode() {
@@ -33,3 +33,15 @@ function tmm_admin_alert() {
 }
 add_action('admin_head', 'tmm_admin_alert');
 add_action('wp_head', 'tmm_admin_alert');
+
+
+add_filter( 'get_site_icon_url', '__return_false' );
+
+add_action( 'admin_head', 'prefix_favicon', 100 );
+add_action( 'wp_head', 'prefix_favicon', 100 );
+function prefix_favicon() {
+    //code of the favicon logic
+    ?>
+        <link rel="icon" class="tobytest" href="<?php echo plugins_url( 'favicon.png' , __FILE__ ); ?>">
+    <?php
+}
