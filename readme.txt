@@ -7,8 +7,23 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
-
 == Description ==
 
-Maintenance Mode for The Mighty Mo! Design Co. LLC
+Hides your WordPress site from people who aren't logged in, displays a simple message for people who aren't logged in (see screengrab), adds a bright red favicon and changes the color of the WP admin bar to bright red to help you know you are editing a DEV site.
+
+
+== Installation ==
+
+1. Either use the built-in Wordpress plugin installer to grab the plugin from the Wordpress plugin repository, or upload the entire contents of the `tmm-maintenance-mode.zip` folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+
+
+== Usage ==
+
+Just activate the plugin - there are no settings.
+
+
+== Screenshots ==
+
+1. WP admin view.
+2. WP frontend view for people who aren't logged in.
