@@ -2,10 +2,10 @@
 
 /*
  * Plugin Name: Maintenance Mode by The Mighty Mo! Design Co.
- * Plugin URI: http://www.themightymo.com/
+ * Plugin URI: https://www.themightymo.com/
  * Description: Hide the site unless logged in.
  * Author: The Mighty Mo! Design Co. LLC
- * Author URI: http://www.themightymo.com/
+ * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
  * Version: 1.6
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
