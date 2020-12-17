@@ -25,7 +25,7 @@ function tmm_admin_alert() {
       background:red !important;
     } 
     #wpadminbar:after {
-	    content: "[THIS SITE IS IN DEVELOPMENT MODE - Sincerely, TMM Maintenance Mode Plugin]";
+	    content: "[THIS SITE IS IN DEVELOPMENT MODE]";
 	    font-size: 1em;
 	    font-weight: bold;
 	    color: #000;
