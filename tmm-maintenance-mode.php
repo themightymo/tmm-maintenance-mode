@@ -9,6 +9,7 @@
  * License: GPLv2 (or later)
  * Version: 1.6
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
+ * GitHub Branch: master
  */
  
 function tmm_maintenance_mode() {
