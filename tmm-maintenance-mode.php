@@ -8,8 +8,9 @@
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
  * Version: 1.7
- * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
  * GitHub Branch: master
+ * GitHub Plugin URI: themightymo/tmm-maintanence-mode
+ * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
  */
  
 function tmm_maintenance_mode() {
