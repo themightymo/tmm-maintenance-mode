@@ -7,17 +7,19 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.6
+ * Version: 1.7
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
  * GitHub Branch: master
  */
  
 function tmm_maintenance_mode() {
-    if ( !current_user_can( 'edit_themes' ) || !is_user_logged_in() ) {
+    global $current_user;
+    get_currentuserinfo();
+    if ( !current_user_can( 'edit_themes' ) && !is_user_logged_in() ) {
         wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
-    }
+    } 
 }
-add_action('get_header', 'tmm_maintenance_mode');
+add_action('init', 'tmm_maintenance_mode');
 
 
 function tmm_admin_alert() {
