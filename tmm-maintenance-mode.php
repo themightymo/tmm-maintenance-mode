@@ -14,11 +14,11 @@
  */
  
 function tmm_maintenance_mode() {
-    global $current_user;
-    get_currentuserinfo();
-    if ( !current_user_can( 'edit_themes' ) && !is_user_logged_in() ) {
-        wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
-    } 
+    if ( !is_user_logged_in() ) {
+	    wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
+	} else {
+	   // your code for logged out user 
+	}
 }
 add_action('init', 'tmm_maintenance_mode');
 
