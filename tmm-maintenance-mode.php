@@ -7,14 +7,18 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.8
+ * Version: 1.9
  * GitHub Branch: master
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
  */
  
+function is_login_page() {
+    return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
+}
+
 function tmm_maintenance_mode() {
-    if ( !is_user_logged_in() ) {
+    if ( !is_user_logged_in() && !is_login_page() ) {
 	    wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
 	} else {
 	   // your code for logged out user 
