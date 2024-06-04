@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 1.10
+ * Version: 2.0
  * GitHub Branch: master
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
@@ -19,7 +19,9 @@ function is_login_page() {
 
 function tmm_maintenance_mode() {
     if ( tmm_is_maintenance_mode_enabled() && !is_user_logged_in() && !is_login_page() ) {
-        wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes!  Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
+        $image_url = tmm_get_maintenance_image();
+        $maintenance_text = tmm_get_maintenance_text();
+        wp_die('<center><img src="'. esc_url($image_url) .'" style="width:100%; height:auto;" /><br>' . wp_kses_post($maintenance_text) . '</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
     } else {
        // your code for logged out user 
     }
@@ -57,11 +59,11 @@ function prefix_favicon() {
 function tmm_add_admin_menu() {
     add_menu_page(
         'Maintenance Mode Settings', // Page title
-        'Maintenance Mode', // Menu title
+        'TMM Maintenance Mode', // Menu title
         'manage_options', // Capability
         'tmm-maintenance-mode', // Menu slug
         'tmm_admin_page', // Callback function
-        'dashicons-admin-tools', // Icon
+        'dashicons-hammer', // Icon
         81 // Position
     );
 }
@@ -83,16 +85,25 @@ function tmm_admin_page() {
     <?php
 }
 
+// Enqueue media uploader scripts
+function tmm_enqueue_media_uploader() {
+    wp_enqueue_media();
+    wp_enqueue_script('tmm-media-uploader', plugins_url('media-uploader.js', __FILE__), array('jquery'), null, true);
+}
+add_action('admin_enqueue_scripts', 'tmm_enqueue_media_uploader');
+
 // Register settings for the plugin
 function tmm_register_settings() {
     register_setting('tmm_settings_group', 'tmm_settings');
     add_settings_section('tmm_settings_section', 'Settings', 'tmm_settings_section_callback', 'tmm-maintenance-mode');
     add_settings_field('tmm_checkbox', 'Enable Maintenance Mode', 'tmm_checkbox_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
+    add_settings_field('tmm_image', 'Maintenance Image', 'tmm_image_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
+    add_settings_field('tmm_text', 'Maintenance Mode Text', 'tmm_text_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
 }
 add_action('admin_init', 'tmm_register_settings');
 
 function tmm_settings_section_callback() {
-    echo 'Enable or disable maintenance mode:';
+    echo 'Enable or disable maintenance mode and set an image:';
 }
 
 function tmm_checkbox_callback() {
@@ -102,15 +113,62 @@ function tmm_checkbox_callback() {
     <?php
 }
 
+function tmm_image_callback() {
+    $options = get_option('tmm_settings');
+    $image_url = isset($options['tmm_image']) ? esc_url($options['tmm_image']) : '';
+    ?>
+    <input type="text" id="tmm_image" name="tmm_settings[tmm_image]" value="<?php echo $image_url; ?>" />
+    <input type="button" class="button-secondary" value="Upload Image" id="tmm_image_upload" />
+    <img src="<?php echo $image_url; ?>" style="max-width: 300px; display: <?php echo $image_url ? 'block' : 'none'; ?>; margin-top: 10px;" />
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $('#tmm_image_upload').click(function(e) {
+                e.preventDefault();
+                var image = wp.media({
+                    title: 'Upload Image',
+                    multiple: false
+                }).open()
+                .on('select', function() {
+                    var uploaded_image = image.state().get('selection').first();
+                    var image_url = uploaded_image.toJSON().url;
+                    $('#tmm_image').val(image_url);
+                    $('#tmm_image').next('img').attr('src', image_url).show();
+                });
+            });
+        });
+    </script>
+    <?php
+}
+
+function tmm_text_callback() {
+    $options = get_option('tmm_settings');
+    $text = isset($options['tmm_text']) ? esc_textarea($options['tmm_text']) : 'We are building stuff behind the scenes! Please come back soon!';
+    ?>
+    <textarea name="tmm_settings[tmm_text]" rows="5" cols="50"><?php echo $text; ?></textarea>
+    <?php
+}
+
 function tmm_is_maintenance_mode_enabled() {
     $options = get_option('tmm_settings');
     return isset($options['tmm_checkbox']) && $options['tmm_checkbox'] == 1;
 }
 
+function tmm_get_maintenance_image() {
+    $options = get_option('tmm_settings');
+    return isset($options['tmm_image']) ? $options['tmm_image'] : plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ );
+}
+
+function tmm_get_maintenance_text() {
+    $options = get_option('tmm_settings');
+    return isset($options['tmm_text']) ? $options['tmm_text'] : 'We are building stuff behind the scenes! Please come back soon!';
+}
+
 // Update the maintenance mode function to check the checkbox value
 function tmm_maintenance_mode_updated() {
     if (tmm_is_maintenance_mode_enabled() && !is_user_logged_in() && !is_login_page()) {
-        wp_die('<center><img src="'. plugins_url( 'the-mighty-mo-logo-March-2018-green-200px-new.png' , __FILE__ ).'" /><br>We are building stuff behind the scenes! Please come back soon!</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
+        $image_url = tmm_get_maintenance_image();
+        $maintenance_text = tmm_get_maintenance_text();
+        wp_die('<center><img src="'. esc_url($image_url) .'" style="width:100%; height:auto;" /><br>' . wp_kses_post($maintenance_text) . '</center><p><center><a href="/wp-login.php">Admin Login</a></center></p>');
     }
 }
 remove_action('init', 'tmm_maintenance_mode');
