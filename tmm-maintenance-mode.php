@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 2.0
+ * Version: 2.1
  * GitHub Branch: master
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
@@ -173,3 +173,22 @@ function tmm_maintenance_mode_updated() {
 }
 remove_action('init', 'tmm_maintenance_mode');
 add_action('init', 'tmm_maintenance_mode_updated');
+
+
+/* 
+	Show notice in admin bar if the "Discourage search engines from indexing this site" option is checked at /wp-admin/options-reading.php.
+*/
+// Hook into the admin bar to add our custom text
+add_action('admin_bar_menu', 'tmm_add_admin_bar_notice_for_search_engines_blocked', 100);
+
+function tmm_add_admin_bar_notice_for_search_engines_blocked($wp_admin_bar) {
+    // Check if the option to discourage search engines is checked
+    if (get_option('blog_public') == '0') {
+        // Add a notice to the admin bar
+        $wp_admin_bar->add_node([
+            'id'    => 'sei-notice',
+            'title' => '<span style="background-color:red;color: white;">You are blocking search engines.</span>',
+            'href'  => admin_url('options-reading.php'), // Link to the Reading Settings page
+        ]);
+    }
+}
