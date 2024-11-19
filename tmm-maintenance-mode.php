@@ -57,24 +57,37 @@ function prefix_favicon() {
 
 // Add an admin menu for the plugin
 function tmm_add_admin_menu() {
-    add_menu_page(
-        'Maintenance Mode Settings', // Page title
-        'TMM Maintenance Mode', // Menu title
-        'manage_options', // Capability
-        'tmm-maintenance-mode', // Menu slug
-        'tmm_admin_page', // Callback function
-        'dashicons-hammer', // Icon
-        81 // Position
-    );
+    if (is_multisite()) {
+        add_menu_page(
+            'Maintenance Mode Settings', // Page title
+            'TMM Maintenance Mode', // Menu title
+            'manage_network_options', // Capability
+            'tmm-maintenance-mode', // Menu slug
+            'tmm_admin_page', // Callback function
+            'dashicons-hammer', // Icon
+            81 // Position
+        );
+    } else {
+        add_menu_page(
+            'Maintenance Mode Settings', // Page title
+            'TMM Maintenance Mode', // Menu title
+            'manage_options', // Capability
+            'tmm-maintenance-mode', // Menu slug
+            'tmm_admin_page', // Callback function
+            'dashicons-hammer', // Icon
+            81 // Position
+        );
+    }
 }
 add_action('admin_menu', 'tmm_add_admin_menu');
+add_action('network_admin_menu', 'tmm_add_admin_menu');
 
 // Display the admin page content
 function tmm_admin_page() {
     ?>
     <div class="wrap">
         <h1>Maintenance Mode Settings</h1>
-        <form method="post" action="options.php">
+        <form method="post" action="<?php echo esc_url(admin_url('options.php')); ?>">
             <?php
             settings_fields('tmm_settings_group');
             do_settings_sections('tmm-maintenance-mode');
