@@ -8,10 +8,9 @@
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
  * Version: 2.2
- * GitHub Branch: master
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
- * GitHub Plugin URI: https://github.com/themightymo/tmm-maintanence-mode
- */
+ * Primary Branch: master
+*/
 
 function is_login_page() {
     return in_array($GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php'));
