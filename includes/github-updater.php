@@ -83,3 +83,17 @@ function tmm_clear_github_update_cache() {
     delete_site_transient( TMM_MAINTENANCE_MODE_GITHUB_CACHE_KEY );
 }
 add_action( 'upgrader_process_complete', 'tmm_clear_github_update_cache', 10, 0 );
+
+function tmm_handle_clear_cache_action() {
+    if (
+        isset( $_POST['tmm_clear_github_cache'] ) &&
+        check_admin_referer( 'tmm_clear_github_cache_nonce' )
+    ) {
+        tmm_clear_github_update_cache();
+        delete_site_transient( 'update_plugins' );
+        add_action( 'admin_notices', function () {
+            echo '<div class="notice notice-success is-dismissible"><p>GitHub update cache cleared.</p></div>';
+        } );
+    }
+}
+add_action( 'admin_init', 'tmm_handle_clear_cache_action' );

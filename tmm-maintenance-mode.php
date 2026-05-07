@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 2.4.2
+ * Version: 2.4.5
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * Primary Branch: master
 */
@@ -97,6 +97,13 @@ function tmm_admin_page() {
             do_settings_sections('tmm-maintenance-mode');
             submit_button();
             ?>
+        </form>
+        <hr>
+        <h2>GitHub Updates</h2>
+        <form method="post">
+            <?php wp_nonce_field( 'tmm_clear_github_cache_nonce' ); ?>
+            <input type="hidden" name="tmm_clear_github_cache" value="1">
+            <?php submit_button( 'Clear Update Cache', 'secondary', 'submit', false ); ?>
         </form>
     </div>
     <?php
