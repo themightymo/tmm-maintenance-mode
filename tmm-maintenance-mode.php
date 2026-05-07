@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 2.4.5
+ * Version: 2.4.6
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * Primary Branch: master
 */
