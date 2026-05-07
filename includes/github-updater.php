@@ -79,6 +79,27 @@ function tmm_push_github_update_to_wordpress( $transient ) {
 }
 add_filter( 'pre_set_site_transient_update_plugins', 'tmm_push_github_update_to_wordpress' );
 
+function tmm_rename_github_zip_folder( $source, $remote_source, $upgrader, $hook_extra ) {
+    if ( ! isset( $hook_extra['plugin'] ) || $hook_extra['plugin'] !== TMM_MAINTENANCE_MODE_PLUGIN_FILE ) {
+        return $source;
+    }
+
+    $plugin_folder = dirname( TMM_MAINTENANCE_MODE_PLUGIN_FILE );
+    $correct_path  = trailingslashit( $remote_source ) . $plugin_folder . '/';
+
+    if ( $source === $correct_path ) {
+        return $source;
+    }
+
+    global $wp_filesystem;
+    if ( $wp_filesystem->move( $source, $correct_path ) ) {
+        return $correct_path;
+    }
+
+    return $source;
+}
+add_filter( 'upgrader_source_selection', 'tmm_rename_github_zip_folder', 10, 4 );
+
 function tmm_clear_github_update_cache() {
     delete_site_transient( TMM_MAINTENANCE_MODE_GITHUB_CACHE_KEY );
 }
