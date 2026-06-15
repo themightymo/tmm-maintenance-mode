@@ -32,11 +32,17 @@ function tmm_maintenance_mode() {
 }
 add_action('init', 'tmm_maintenance_mode');
 
+function tmm_get_admin_bar_color() {
+    $options = get_option('tmm_settings');
+    return isset($options['tmm_bar_color']) && $options['tmm_bar_color'] ? sanitize_hex_color($options['tmm_bar_color']) : '#ff0000';
+}
+
 function tmm_admin_alert() {
-  echo '<style>
+    $color = tmm_get_admin_bar_color();
+    echo '<style>
     #wpadminbar {
-      background:red !important;
-    } 
+      background:' . esc_attr($color) . ' !important;
+    }
     #wpadminbar:after {
         content: "[THIS SITE IS IN DEVELOPMENT MODE]";
         font-size: 1em;
@@ -109,10 +115,12 @@ function tmm_admin_page() {
     <?php
 }
 
-// Enqueue media uploader scripts
+// Enqueue media uploader scripts and color picker
 function tmm_enqueue_media_uploader() {
     wp_enqueue_media();
     wp_enqueue_script('tmm-media-uploader', plugins_url('media-uploader.js', __FILE__), array('jquery'), null, true);
+    wp_enqueue_style('wp-color-picker');
+    wp_enqueue_script('wp-color-picker');
 }
 add_action('admin_enqueue_scripts', 'tmm_enqueue_media_uploader');
 
@@ -123,6 +131,7 @@ function tmm_register_settings() {
     add_settings_field('tmm_checkbox', 'Enable Maintenance Mode', 'tmm_checkbox_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
     add_settings_field('tmm_image', 'Maintenance Image', 'tmm_image_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
     add_settings_field('tmm_text', 'Maintenance Mode Text', 'tmm_text_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
+    add_settings_field('tmm_bar_color', 'Admin Bar Color', 'tmm_bar_color_callback', 'tmm-maintenance-mode', 'tmm_settings_section');
 }
 add_action('admin_init', 'tmm_register_settings');
 
@@ -169,6 +178,19 @@ function tmm_text_callback() {
     $text = isset($options['tmm_text']) ? esc_textarea($options['tmm_text']) : 'We are building stuff behind the scenes! Please come back soon!';
     ?>
     <textarea name="tmm_settings[tmm_text]" rows="5" cols="50"><?php echo $text; ?></textarea>
+    <?php
+}
+
+function tmm_bar_color_callback() {
+    $color = tmm_get_admin_bar_color();
+    ?>
+    <input type="text" name="tmm_settings[tmm_bar_color]" value="<?php echo esc_attr($color); ?>" class="tmm-color-picker" data-default-color="#ff0000" />
+    <script>
+    jQuery(document).ready(function($) {
+        $('.tmm-color-picker').wpColorPicker();
+    });
+    </script>
+    <p class="description">Override the color of the "[THIS SITE IS IN DEVELOPMENT MODE]" admin bar.</p>
     <?php
 }
 
