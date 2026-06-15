@@ -7,7 +7,7 @@
  * Author: The Mighty Mo! Design Co. LLC
  * Author URI: https://www.themightymo.com/
  * License: GPLv2 (or later)
- * Version: 2.5
+ * Version: 2.5.1
  * GitHub Plugin URI: themightymo/tmm-maintanence-mode
  * Primary Branch: master
 */
@@ -223,7 +223,35 @@ remove_action('init', 'tmm_maintenance_mode');
 add_action('init', 'tmm_maintenance_mode_updated');
 
 
-/* 
+function tmm_plugin_action_links( $links ) {
+    $url = wp_nonce_url(
+        admin_url( 'plugins.php?tmm_clear_github_cache=1' ),
+        'tmm_clear_github_cache_nonce'
+    );
+    $links[] = '<a href="' . esc_url( $url ) . '">' . __( 'Clear Update Cache' ) . '</a>';
+    return $links;
+}
+add_filter( 'plugin_action_links_' . TMM_MAINTENANCE_MODE_PLUGIN_FILE, 'tmm_plugin_action_links' );
+
+function tmm_handle_clear_cache_link() {
+    if (
+        isset( $_GET['tmm_clear_github_cache'] ) &&
+        check_admin_referer( 'tmm_clear_github_cache_nonce' )
+    ) {
+        tmm_clear_github_update_cache();
+        delete_site_transient( 'update_plugins' );
+        wp_safe_redirect( add_query_arg( 'tmm_cache_cleared', '1', admin_url( 'plugins.php' ) ) );
+        exit;
+    }
+    if ( isset( $_GET['tmm_cache_cleared'] ) ) {
+        add_action( 'admin_notices', function () {
+            echo '<div class="notice notice-success is-dismissible"><p>GitHub update cache cleared.</p></div>';
+        } );
+    }
+}
+add_action( 'admin_init', 'tmm_handle_clear_cache_link' );
+
+/*
 	Show notice in admin bar if the "Discourage search engines from indexing this site" option is checked at /wp-admin/options-reading.php.
 */
 // Hook into the admin bar to add our custom text
