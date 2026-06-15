@@ -59,9 +59,11 @@ add_filter( 'get_site_icon_url', '__return_false' );
 add_action( 'admin_head', 'prefix_favicon', 100 );
 add_action( 'wp_head', 'prefix_favicon', 100 );
 function prefix_favicon() {
-    //code of the favicon logic
+    $color = tmm_get_admin_bar_color();
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="' . esc_attr($color) . '"/></svg>';
+    $favicon_url = 'data:image/svg+xml;base64,' . base64_encode($svg);
     ?>
-        <link rel="icon" class="tobytest" href="<?php echo plugins_url( 'favicon.png' , __FILE__ ); ?>">
+        <link rel="icon" href="<?php echo esc_attr($favicon_url); ?>">
     <?php
 }
 
